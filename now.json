@@ -1,5 +1,6 @@
 {
   "name": "effuse",
   "version": 2,
-  "builds": [{ "src": "package.json", "use": "@now/static-build" }]
+  "builds": [{ "src": "dist/**", "use": "@now/static" }],
+  "routes": [{ "src": "/(.*)", "dest": "dist/$1" }]
 }
