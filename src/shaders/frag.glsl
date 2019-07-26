@@ -7,7 +7,7 @@ const float EPSILON = 0.0001;
 const int MAX_ITERS = 8;
 const float HALF_PI =  1.5707964;
 
-const float distance = 15.0;
+const float distance = 13.0;
 const float noise = 0.2;
 const float displ = 2.75;
 const float light = 0.5;
@@ -58,11 +58,11 @@ vec3 rep(in vec3 p, in vec3 c) {
 }
 
 float scene(vec3 p) {
-	p.z += sin(time.x / 10.0) * sin(time.x / 10.0) * 20.0;
+	//p.z += sin(time.x / 10.0) * sin(time.x / 10.0) * 20.0;
 
 	float o_plane = p.y + 1.7;
 
-	vec3 q = rep(p, vec3(8.0, 0.0, 8.0));
+	vec3 q = rep(p, vec3(10.0, 0.0, 10.0));
     vec3 rp = rotateY(time.x + sin(time.x)) * q;
 
 	float o_octa = max(
@@ -168,7 +168,7 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
 	if(id == 1) {
 		color = mix(color, vec3(1.0), 0.9);
 	} else {
-		color = mix(color, vec3(1.0), 0.4);
+		color = mix(color, vec3(1.0), 0.6);
 	}
 
     color += phong_contrib(k_d, k_s, alpha, p, eye,
@@ -219,15 +219,15 @@ vec3 ray_dir(float fieldOfView, vec2 size, vec2 fragCoord) {
 void main() {
     vec3 dir = ray_dir(45.0, dimensions, vposition.xy * dimensions + (dimensions / 2.0));
 
-    vec3 input_cam_pos = vec3(0.5, 0.5, 0.5);// * cos(time.x / 25.0);
+    vec3 input_cam_pos = vec3(1.0, 0.6, 1.0);// * cos(time.x / 25.0);
 	float y_pos_mod = abs(tan(time.x / 10.0)) / 4.0;
     vec3 cam_pos = vec3(
         cos(input_cam_pos.x) * cos(input_cam_pos.y),
-        min(input_cam_pos.y + (y_pos_mod * y_pos_mod * y_pos_mod), 5.0),
+        min(input_cam_pos.y + (y_pos_mod * y_pos_mod), 6.2),
         sin(input_cam_pos.x) * cos(input_cam_pos.y)
     ) * distance;
 
-    mat4 view_mat = view_matrix(cam_pos, vec3(0.0), vec3(0.0, 1.0, 0.0));
+    mat4 view_mat = view_matrix(cam_pos, vec3(5.0, 0.0, 5.0), vec3(0.0, 1.0, 0.0));
     vec3 v_dir = (view_mat * vec4(dir, 0.0)).xyz;
 
     gl_FragColor = render(cam_pos, v_dir);
