@@ -59,9 +59,9 @@ vec3 rep(in vec3 p, in vec3 c) {
 
 float scene(vec3 p) {
 	p.z += sin(time.x / 10.0) * sin(time.x / 10.0) * 20.0;
-    
+
 	float o_plane = p.y + 1.7;
-    
+
 	vec3 q = rep(p, vec3(8.0, 0.0, 8.0));
     vec3 rp = rotateY(time.x + sin(time.x)) * q;
 
@@ -75,7 +75,7 @@ float scene(vec3 p) {
 		0.4), 0.1), 0.05)
 	);
 
-	if(o_octa > o_plane) {
+	if(o_octa >= o_plane) {
 		id = 1;
 	}
 
@@ -156,19 +156,20 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
     vec3 color = ambient_light * k_a;
     vec3 normal = estimate_normal(p);
 
-    color = mix(color, normal, ncolor);
-	if(id == 1) {
-		color = mix(color, vec3(1.0), 0.9);
-	} else {
-		color = mix(color, vec3(1.0), 0.6);
-	}
-
     float occ = calc_AO(p, normal);
 
     vec3 light_pos = vec3(4.0 * sin(time.x),
                           5.0,
                           4.0 * cos(time.x));
     vec3 light_intensity = vec3(light);
+
+
+	color = mix(color, normal, ncolor);
+	if(id == 1) {
+		color = mix(color, vec3(1.0), 0.9);
+	} else {
+		color = mix(color, vec3(1.0), 0.4);
+	}
 
     color += phong_contrib(k_d, k_s, alpha, p, eye,
                                   light_pos,
@@ -218,11 +219,11 @@ vec3 ray_dir(float fieldOfView, vec2 size, vec2 fragCoord) {
 void main() {
     vec3 dir = ray_dir(45.0, dimensions, vposition.xy * dimensions + (dimensions / 2.0));
 
-    vec3 input_cam_pos = vec3(0.5, 1.0, 0.5);// * cos(time.x / 25.0);
-	float y_pos_mod = abs(tan(time.x / 10.0));
+    vec3 input_cam_pos = vec3(0.5, 0.5, 0.5);// * cos(time.x / 25.0);
+	float y_pos_mod = abs(tan(time.x / 10.0)) / 4.0;
     vec3 cam_pos = vec3(
         cos(input_cam_pos.x) * cos(input_cam_pos.y),
-        min((sin(input_cam_pos.y) / 5.0) + (y_pos_mod * y_pos_mod * y_pos_mod), 5.3),
+        min(input_cam_pos.y + (y_pos_mod * y_pos_mod * y_pos_mod), 5.0),
         sin(input_cam_pos.x) * cos(input_cam_pos.y)
     ) * distance;
 
