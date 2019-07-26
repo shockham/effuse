@@ -220,7 +220,7 @@ void main() {
     vec3 dir = ray_dir(45.0, dimensions, vposition.xy * dimensions + (dimensions / 2.0));
 
     vec3 input_cam_pos = vec3(1.0, 0.6, 1.0);// * cos(time.x / 25.0);
-	float y_pos_mod = abs(tan(time.x / 10.0)) / 4.0;
+	float y_pos_mod = abs(tan(time.x / 10.0)) / 2.0;
     vec3 cam_pos = vec3(
         cos(input_cam_pos.x) * cos(input_cam_pos.y),
         min(input_cam_pos.y + (y_pos_mod * y_pos_mod), 6.2),
