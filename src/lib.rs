@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use infuse::{request_animation_frame, RenderItem, Renderer};
+use infuse::{request_animation_frame, RenderItem, Renderer, Uniform};
 use instant;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -19,7 +19,7 @@ pub fn start() -> Result<(), JsValue> {
 
     // create the uniforms for the render item
     let mut uniforms = HashMap::new();
-    uniforms.insert("time".to_string(), (start_time as f32, 0f32, 0f32, 0f32));
+    uniforms.insert("time".to_string(), Uniform::Float(start_time as f32));
 
     let render_item = RenderItem::new(
         vec![
@@ -36,7 +36,7 @@ pub fn start() -> Result<(), JsValue> {
         let tick_time = instant::now();
         render_items[0].set_uniform(
             "time".to_string(),
-            ((tick_time / 500f64) as f32, 0f32, 0f32, 0f32),
+            Uniform::Float((tick_time / 500f64) as f32),
         );
         renderer.draw(&render_items).unwrap();
     });
